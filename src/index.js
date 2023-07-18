@@ -9,7 +9,7 @@ const { selectElement, loader, loaderElement, errorRef, catInfo} = refs;
 
 hide(errorRef, selectElement);
 
-setTimeout(() => {
+
   fetchBreeds()
     .then(breeds => {
       // Create and add breeds - <option> in select
@@ -22,7 +22,6 @@ setTimeout(() => {
 			hide(loaderElement, loader);
 			show(errorRef);
     });
-}, 2000);
 
 selectElement.addEventListener('change', onSelected);
 
@@ -31,19 +30,20 @@ function onSelected() {
 	show(loaderElement, loader);
 
   const breedId = selectElement.value;
-  setTimeout(() => {
     fetchCatByBreed(breedId)
       .then(data => {
         markupCatInfo(data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
         Notiflix.Notify.failure(
           '❌ Information about cat for this breed is not found!'
         );
-        
-				hide(loaderElement, loader);
-				show(errorRef);
+        hide(loaderElement, loader);
+        show(errorRef);
+        setTimeout(() => {
+          hide(errorRef);
+        }, 3000); // Hide error message after 3 seconds
       });
-  }, 2000);
+  
 }
